@@ -58,6 +58,8 @@ And there you have it.
 
 ## Other stuff
 
+### Interactive shell
+
 To start the image with an interactive shell:
 
 	$ docker run -p 127.0.0.1:5000:5000 -v /tmp/rrd_data:/rrd_data -v \
@@ -67,6 +69,26 @@ To start the image with an interactive shell:
 You can then start the `rrdcached` daemon manually with:
 
 	$ rrdcached -l 0.0.0.0:5000 -z 2 -f 3600 -p /rrd_tmp/rrdcached.pid -t 8 -j /rrd_journal -g -b /rrd_data
+
+### Examples
+
+The following examples illustrate how to create an RRD database for 2 random number generators that will store a value every 20 seconds while keeping the data for 1 year. The database is less then 50MiB in size, which is actually impressive taken into account the fast number of data that will be stored.
+
+#### Creating the database
+
+The following is an example CREATE command - first the CLI method:
+
+	$ rrdtool create random_number.rrd --step 30 DS:generator1:GAUGE:60:0:100 DS:generator2:GAUGE:60:0:100 RRA:MIN:0.5:1:1051200 RRA:MAX:0.5:1:1051200 RRA:AVERAGE:0.5:1:1051200
+
+And now the protocol version (enter this into your Telnet session):
+
+	CREATE random_number.rrd -s 30 -O DS:generator1:GAUGE:60:0:100 DS:generator2:GAUGE:60:0:100 RRA:MIN:0.5:1:1051200 RRA:MAX:0.5:1:1051200 RRA:AVERAGE:0.5:1:1051200
+
+#### Random number generator
+
+You can use the following bash one liner to add data every 20 seconds in an infinite loop:
+
+	$ while true; do (sleep 1; echo "UPDATE random_number.rrd "`date +%s`":"`echo $((0 + RANDOM % 100))`":"`echo $((0 + RANDOM % 100))`; sleep 1 ; echo QUIT) | telnet 127.0.0.1 5000; sleep 20; done
 
 ## Next steps
 

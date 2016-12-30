@@ -92,7 +92,7 @@ You can use the following bash one liner to add data every 20 seconds in an infi
 
 	$ while true; do (sleep 1; echo "UPDATE random_number.rrd "`date +%s`":"`echo $((0 + RANDOM % 100))`":"`echo $((0 + RANDOM % 100))`; sleep 1 ; echo QUIT) | telnet 127.0.0.1 5000; sleep 20; done
 
-This take some time, but you can also generate a batch of values quickly using the script in the `eamples` directory.
+This take some time, but you can also generate a batch of values quickly using the script in the `examples` directory.
 
 #### Generating a graph
 

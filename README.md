@@ -76,7 +76,7 @@ The following examples illustrate how to create an RRD database for 2 random num
 
 #### Creating the database
 
-The following is an example CREATE command - first the CLI method:
+The following is an example CREATE command - first the CLI method as an example:
 
 	$ rrdtool create random_number.rrd --step 30 DS:generator1:GAUGE:60:0:100 DS:generator2:GAUGE:60:0:100 RRA:MIN:0.5:1:1051200 RRA:MAX:0.5:1:1051200 RRA:AVERAGE:0.5:1:1051200
 
@@ -87,6 +87,8 @@ And now the protocol version (enter this into your Telnet session):
 <b>Hint</b>: To help you create a RRD database, use a wizard like [this one](http://rrdwizard.appspot.com/rrdcreate.php)...
 
 #### Random number generator
+
+These scripts or commands should be run from your main system (not the Docker service).
 
 You can use the following bash one liner to add data every 20 seconds in an infinite loop:
 
@@ -105,8 +107,3 @@ The values for `-s` and `-e` is the UNIX timestamp for the start and stop time. 
 	$ date -d '2016-12-30 10:00:00' +%s
 	1483084800
 
-I hope to add a graphing function at some stage using a Flask service (see 'Next Steps' below).
-
-## Next Steps
-
-The `rrdcached` protocol does not cater for graphing functions, which would have been very nice to have. I will probably create a [Flask](http://flask.pocoo.org/) service for that...

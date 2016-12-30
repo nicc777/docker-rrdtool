@@ -84,6 +84,8 @@ And now the protocol version (enter this into your Telnet session):
 
 	CREATE random_number.rrd -s 30 -O DS:generator1:GAUGE:60:0:100 DS:generator2:GAUGE:60:0:100 RRA:MIN:0.5:1:1051200 RRA:MAX:0.5:1:1051200 RRA:AVERAGE:0.5:1:1051200
 
+<b>Hint</b>: To help you create a RRD database, use a wizard like [this one](http://rrdwizard.appspot.com/rrdcreate.php)...
+
 #### Random number generator
 
 You can use the following bash one liner to add data every 20 seconds in an infinite loop:

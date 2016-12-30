@@ -92,6 +92,21 @@ You can use the following bash one liner to add data every 20 seconds in an infi
 
 	$ while true; do (sleep 1; echo "UPDATE random_number.rrd "`date +%s`":"`echo $((0 + RANDOM % 100))`":"`echo $((0 + RANDOM % 100))`; sleep 1 ; echo QUIT) | telnet 127.0.0.1 5000; sleep 20; done
 
-## Next steps
+This take some time, but you can also generate a batch of values quickly using the script in the `eamples` directory.
+
+#### Generating a graph
+
+At the moment, the graph cannot be generated through the TCP protocol, but if you enter the interactive console, you can generate a graph with something like the following:
+
+	$ rrdtool graph /rrd_tmp/random_number.png -s 1483041600 -e 1483084800 -S 600 -t 'Random Number Generators Data from 2016-12-29 22:00:00 to 2016-12-30 10:00:00' -w 800 -h 600 -a PNG DEF:g1=/rrd_data/random_number.rrd:generator1:AVERAGE DEF:g2=/rrd_data/random_number.rrd:generator2:AVERAGE  LINE2:g1#000000:Generator_1 AREA:g2#ff000080:Generator_2
+
+The values for `-s` and `-e` is the UNIX timestamp for the start and stop time. You can calculate it easily in Bash with something like the following:
+
+	$ date -d '2016-12-30 10:00:00' +%s
+	1483084800
+
+I hope to add a graphing function at some stage using a Flask service (see 'Next Steps' below).
+
+## Next Steps
 
 The `rrdcached` protocol does not cater for graphing functions, which would have been very nice to have. I will probably create a [Flask](http://flask.pocoo.org/) service for that...
